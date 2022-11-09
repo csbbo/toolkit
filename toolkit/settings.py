@@ -25,7 +25,7 @@ if os.path.exists(dotenv_path):
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-p(+ye=escg9*i-z^*-6$y(j+5f%sw5c%3t@ig*!!^w49^pw541"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -132,3 +132,27 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django REST framework 配置
+# https://www.django-rest-framework.org/api-guide/settings/#settings
+REST_FRAMEWORK = {
+    "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
+    "DATE_FORMAT": "%s",
+    "DEFAULT_RENDERER_CLASSES": (
+        # 统一响应数据格式
+        "toolkit.middleware.renderers.UniformJSONRenderer",
+    ),
+    # 全局异常处理
+    "EXCEPTION_HANDLER": "toolkit.middleware.handlers.exception_handler",
+    "DEFAULT_PERMISSION_CLASSES": (
+        # 默认所有接口都需要token认证
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ],
+    "DEFAULT_FILTER_BACKENDS": [
+        # django-filter 集成 rest_framework
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],
+}

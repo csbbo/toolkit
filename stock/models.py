@@ -7,6 +7,7 @@ class Stock(CUBaseModel):
     ts_code = models.CharField(max_length=200, default="", null=True)
     symbol = models.CharField(max_length=200, default="", null=True)
     name = models.CharField(max_length=200, default="", null=True)
+    pinyin = models.CharField(max_length=200, default="", null=True)
     area = models.CharField(max_length=200, default="", null=True)
     industry = models.CharField(max_length=200, default="", null=True)
     fullname = models.CharField(max_length=200, default="", null=True)

@@ -5,3 +5,5 @@ tushare==1.2.85
 APScheduler==3.9.1
 python-dotenv==0.21.0
 gunicorn[gevent]==20.1.0
+django-filter==22.1
+pypinyin==0.47.1

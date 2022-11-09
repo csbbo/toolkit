@@ -4,7 +4,7 @@ ADD ./ /web
 
 WORKDIR /web
 
-ENV PACKAGE gcc libpq-dev vim curl python3 python3-pip
+ENV PACKAGE gcc libpq-dev vim curl python3.11 python3-pip
 
 RUN apt-get update \
     && apt-get install -y ${PACKAGE} \
