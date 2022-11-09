@@ -1,0 +1,69 @@
+# 安装pre-commit: pip3 install pre-commit
+# 安装.pre-commit-config.yaml中钩子: pre-commit install
+# 手动运行pre-commit: pre-commit run --all-files
+
+
+exclude: |
+  (?x)(
+      ^\w+/migrations/ |
+      ^\w+/admin.py |
+      ^\w+/tests.py |
+      ^manage.py
+  )
+
+repos:
+  - repo: local
+    hooks:
+      - id: commit-message-format-check
+        name: Check commit message format
+        language: pygrep
+        entry: '\A(?!(feat|fix|docs|style|refactor|test|chore): .+)'
+        args: [ --multiline ]
+        stages: [ commit-msg ]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-ast
+
+  # copy from https://github.com/django/django/blob/main/.pre-commit-config.yaml
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args: [ --profile, black ]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        args: [ --max-line-length=120 ]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: ''
+    hooks:
+      - id: mypy
+        args: [
+          --python-version=3.11,
+          --no-strict-optional,
+          --ignore-missing-imports,
+          --no-implicit-optional,
+          --strict-optional,
+          --strict-equality,
+          --follow-imports=normal,
+          --warn-unused-ignores,
+          --warn-redundant-casts,
+          --warn-unused-configs,
+          --warn-unreachable,
+          --warn-no-return,
+          --check-untyped-defs,
+          --disallow-untyped-defs
+        ]
