@@ -47,4 +47,6 @@ class StockViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
                 continue
 
             infos.append(f"{name} {price} {rose}%")
-        return HttpResponse("\n".join(infos))
+
+        resp = "\n".join(infos) + "\n"
+        return HttpResponse(resp)

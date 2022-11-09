@@ -11,6 +11,7 @@ done
 echo -e "\033[31m - run sync stock scheduler server \033[0m"
 python3 manage.py sync_stock_scheduler 2>&1 &
 
+# todo: 切换成toolkit
 cat <<-'EOF'
    ____  _          ____
   / ___|| | ___   _| __ )  _____  __
