@@ -1,11 +1,11 @@
-from pypinyin import pinyin, Style
+from pypinyin import Style, pinyin
 
 
 def chinese2pinyin_initials(name: str) -> str:
     """
     中文转拼音首字母
     """
-    s = ''
+    s = ""
     for letter in pinyin(name, style=Style.FIRST_LETTER, strict=False):
         s += letter[0][0]
     return s

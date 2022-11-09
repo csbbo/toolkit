@@ -1,7 +1,6 @@
 from typing import List
 
 from common.filters import DynamicFilter
-
 from stock.models import Stock
 
 
