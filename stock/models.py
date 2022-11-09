@@ -1,6 +1,6 @@
 from django.db import models
 
-from toolkit.common.models import CUBaseModel
+from common.models import CUBaseModel
 
 
 class Stock(CUBaseModel):
@@ -20,4 +20,4 @@ class Stock(CUBaseModel):
     is_hs = models.CharField(max_length=200)
 
     class Meta:
-        ordering = ("-updated_at",)
+        ordering = ("-update_time",)

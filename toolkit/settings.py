@@ -37,14 +37,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "stock",
 ]
 
-# INSTALLED_APPS.extend(
-#     [
-#         "toolkit.stock",
-#     ]
-# )
+INSTALLED_APPS.extend(
+    [
+        "stock",
+    ]
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
