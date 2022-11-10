@@ -22,4 +22,4 @@ services:
     container_name: tk_server
     restart: always
     ports:
-      - "9000:8000"
+      - "80:8000"
