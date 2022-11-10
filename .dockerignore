@@ -1,6 +1,7 @@
 .git
 .idea
 .gitignore
+.mypy_cache
 Dockerfile
 docker-compose.yml
 
