@@ -38,22 +38,18 @@ class WxViewSet(GenericViewSet):
         return HttpResponse(content=result)
 
     def reply_message(self, request: Request) -> HttpResponse:
-        text = request.body.decode(encoding="utf-8")
-        logger.info(f"receive: {text=}")
-        logger.info(xml_utils.xml2dict(text))
-        xml_data = xml_utils.xml2dict(text).get("xml", {})
+        body = request.body.decode(encoding="utf-8")
+
+        xml_data = xml_utils.xml2dict(body).get("xml", {})
 
         msg_type = xml_data.get("MsgType", "")
+        message = xml_data.get("Content", "")
+        to_user_name = xml_data.get("FromUserName", "")
+        from_user_name = xml_data.get("ToUserName", "")
+
         if msg_type == "text":
-            message = xml_data.get("Content", "")
             content = get_stock_market_info(message)
-
-            if not content:
-                content = "查询失败"
-
-            to_user_name = xml_data.get("FromUserName", "")
-            from_user_name = xml_data.get("ToUserName", "")
-            logger.info(f"reply message {to_user_name=}, {from_user_name=}, {content=}")
+            logger.info(f"reply message {from_user_name=}, {to_user_name=}, {content=}")
 
             content = get_resp_content(from_user_name, to_user_name, content)
             return HttpResponse(content)
