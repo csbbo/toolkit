@@ -15,6 +15,7 @@ def check_signature(signature: str, timestamp: str, nonce: str, echostr: str) ->
     @params echostr: 随机字符串, 原样返回 echostr 参数内容，则接入生效，成为开发者成功，否则接入失败
     """
     logger.info(f"check_signature: {signature=}, {timestamp=}, {nonce=}, {echostr=}")
+
     token = os.getenv("WECHAT_TOKEN", "")
     params = [token, timestamp, nonce]
     params.sort()
