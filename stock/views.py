@@ -35,10 +35,10 @@ class StockViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
         infos = []
         for search in searches:
             queryset = self.get_queryset().filter(
-                Q(pinyin__icontains=search)
-                | Q(name__icontains=search)
-                | Q(ts_code=search)
+                Q(ts_code=search)
                 | Q(symbol=search)
+                | Q(pinyin__icontains=search)
+                | Q(name__icontains=search)
             )
 
             for stock in queryset:

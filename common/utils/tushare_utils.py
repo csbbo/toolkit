@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_client() -> DataApi:
-    tushare_client = tushare.pro_api(os.getenv("TU_SHARE_TOKE"))
+    tushare_client = tushare.pro_api(os.getenv("TU_SHARE_TOKEN"))
     return tushare_client
 
 
