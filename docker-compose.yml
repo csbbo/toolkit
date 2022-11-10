@@ -4,8 +4,6 @@ services:
     image: mongo:4.2.9
     container_name: tk_mongo
     restart: always
-    env_file:
-      - ".env.docker"
     ports:
       - "127.0.0.1:17017:27017/tcp"
     volumes:
@@ -15,8 +13,6 @@ services:
     image: redis:6.2.6
     container_name: tk_redis
     restart: always
-    env_file:
-      - ".env.docker"
     ports:
       - "127.0.0.1:16379:6379/tcp"
     volumes:
@@ -25,7 +21,5 @@ services:
     image: toolkit:latest
     container_name: tk_server
     restart: always
-    env_file:
-      - ".env.docker"
     ports:
       - "80:8000"
