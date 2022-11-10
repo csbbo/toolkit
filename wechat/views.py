@@ -36,7 +36,7 @@ class WxViewSet(GenericViewSet):
         return HttpResponse(content=result)
 
     def reply_message(self, request: Request) -> HttpResponse:
-        text = request.text()
+        text = request.data
         logger.info(f"receive: {text=}")
         logger.info(xml_utils.xml2dict(text))
         xml_data = xml_utils.xml2dict(text).get("xml", {})
