@@ -10,6 +10,7 @@ from rest_framework.decorators import (
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_xml.parsers import XMLParser
 
 from common.utils import xml_utils
 from stock.utils import get_stock_market_info
@@ -19,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class WxViewSet(GenericViewSet):
+    parser_classes = [XMLParser]
     permission_classes: List[BasePermission] = []
 
     def check_token(self, request: Request) -> HttpResponse:
@@ -36,7 +38,7 @@ class WxViewSet(GenericViewSet):
         return HttpResponse(content=result)
 
     def reply_message(self, request: Request) -> HttpResponse:
-        text = request.data
+        text = request.body.decode(encoding="utf-8")
         logger.info(f"receive: {text=}")
         logger.info(xml_utils.xml2dict(text))
         xml_data = xml_utils.xml2dict(text).get("xml", {})
@@ -55,7 +57,7 @@ class WxViewSet(GenericViewSet):
 
             content = get_resp_content(from_user_name, to_user_name, content)
             return HttpResponse(content)
-        return HttpResponse("fail")
+        return HttpResponse(content="")
 
 
 # todo: permission_classes, authentication_classes 使用问题

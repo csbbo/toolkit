@@ -8,3 +8,4 @@ gunicorn[gevent]==20.1.0
 django-filter==22.1
 pypinyin==0.47.1
 xmltodict==0.13.0
+djangorestframework-xml==2.0.0
