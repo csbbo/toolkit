@@ -21,4 +21,5 @@ API_PREFIX = "api"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(f"{API_PREFIX}/stock/", include("stock.urls")),
+    path(f"{API_PREFIX}/wechat/", include("wechat.urls")),
 ]

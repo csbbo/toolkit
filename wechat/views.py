@@ -1,29 +1,36 @@
 import logging
 
-from django.db.models import Q
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    permission_classes,
+)
 from rest_framework.request import Request
 
-from common.utils import tushare_utils, xml_utils
-from stock.models import Stock
+from common.utils import xml_utils
+from stock.utils import get_stock_market_info
 from wechat.utils import check_signature, get_resp_content
 
 logger = logging.getLogger(__name__)
 
 
-@api_view(["POST"])
+@api_view(["GET"])
+@permission_classes([])
+@authentication_classes([])
 def check_token(request: Request) -> HttpResponse:
-    signature = request.query.get("signature", "")
-    timestamp = request.query.get("timestamp", "")
-    nonce = request.query.get("nonce", "")
-    echostr = request.query.get("echostr", "")
-    logger.info(f"receive: {signature=}, {timestamp=}, {nonce=}, {echostr=},")
+    """
+    https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html
+    需要正确响应来自微信服务器的请求微信服务器，才能修改公众号服务器配置
+    """
+    data = request.GET
+    signature = data.get("signature", "")
+    timestamp = data.get("timestamp", "")
+    nonce = data.get("nonce", "")
+    echostr = data.get("echostr", "")
 
-    check_success = check_signature(signature, timestamp, nonce)
-    if not check_success:
-        return HttpResponse(text="")
-    return HttpResponse(text=echostr)
+    result = check_signature(signature, timestamp, nonce, echostr)
+    return HttpResponse(content=result)
 
 
 @api_view(["GET"])
@@ -35,17 +42,7 @@ def official_account(request: Request) -> HttpResponse:
     msg_type = xml_data.get("MsgType", "")
     if msg_type == "text":
         message = xml_data.get("Content", "")
-        content = ""
-
-        stocks = Stock.objects.filter(
-            Q(ts_code=message)
-            | Q(symbol=message)
-            | Q(pinyin__icontains=message)
-            | Q(name__icontains=message)
-        )
-        for stock in stocks:
-            price = tushare_utils.get_real_time_market(stock.ts_code)
-            content += f"{stock.name} {price}"
+        content = get_stock_market_info(message)
 
         if not content:
             content = "查询失败"
