@@ -1,19 +1,27 @@
-from typing import Union
+from typing import List, Union
 
 from django.db.models import Q
 
 from common.utils import tushare_utils
-from common.utils.str_utils import chinese2pinyin_initials
 from stock.models import Stock
 
 
 def batch_save_stocks(items: list, batch_size: int = 100) -> None:
+    update_fields: List[str] = []
+    unique_fields = ["ts_code"]
+
     bulk_create_list = []
     for item in items:
-        item["pinyin"] = chinese2pinyin_initials(item["name"])
+        if not update_fields:
+            update_fields = [x for x in item.keys() if x not in unique_fields]
         bulk_create_list.append(Stock(**item))
+
     Stock.objects.bulk_create(
-        bulk_create_list, ignore_conflicts=True, batch_size=batch_size
+        bulk_create_list,
+        batch_size=batch_size,
+        update_conflicts=True,
+        update_fields=update_fields,
+        unique_fields=unique_fields,
     )
 
 

@@ -15,6 +15,9 @@ def get_client() -> DataApi:
 
 
 def fetch_stocks(fields: Optional[list] = None) -> Iterable[dict]:
+    """
+    https://tushare.pro/document/2?doc_id=25
+    """
     if fields is None:
         fields = [
             "ts_code",
@@ -24,6 +27,7 @@ def fetch_stocks(fields: Optional[list] = None) -> Iterable[dict]:
             "industry",
             "fullname",
             "enname",
+            "cnspell",
             "market",
             "exchange",
             "curr_type",
