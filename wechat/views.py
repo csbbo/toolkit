@@ -38,6 +38,9 @@ class WxViewSet(GenericViewSet):
         return HttpResponse(content=result)
 
     def reply_message(self, request: Request) -> HttpResponse:
+        """
+        https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Getting_Started_Guide.html
+        """
         body = request.body.decode(encoding="utf-8")
 
         xml_data = xml_utils.xml2dict(body).get("xml", {})
