@@ -1,8 +1,8 @@
 import logging
-import os
 import time
 
 from common.utils import hash_utils
+from common.utils.config_utils import get_config
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def check_signature(signature: str, timestamp: str, nonce: str, echostr: str) ->
     """
     logger.info(f"check_signature: {signature=}, {timestamp=}, {nonce=}, {echostr=}")
 
-    token = os.getenv("WECHAT_TOKEN", "")
+    token = get_config("WECHAT_TOKEN", "")
     params = [token, timestamp, nonce]
     params.sort()
     content = "".join(params)
