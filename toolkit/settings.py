@@ -127,6 +127,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# admin时间格式化
+USE_L10N = False
+DATETIME_FORMAT = "Y-m-d H:i:s"
+
 # Django REST framework 配置
 # https://www.django-rest-framework.org/api-guide/settings/#settings
 REST_FRAMEWORK = {
