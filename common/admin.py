@@ -64,6 +64,7 @@ class ConfigAdmin(admin.ModelAdmin):
 class LogAdmin(admin.ModelAdmin):
     list_display = ("id", "type", "info", "create_time")
     list_display_links = ("id",)
+    readonly_fields = list_display
 
     search_fields = ("type", "info")
     search_help_text = get_search_help_text(search_fields)

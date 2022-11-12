@@ -13,6 +13,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_xml.parsers import XMLParser
 
 from common.utils import xml_utils
+from common.utils.log_utils import save_stock_op_log
 from stock.utils import get_stock_market_info
 from wechat.utils import check_signature, get_resp_content
 
@@ -53,6 +54,12 @@ class WxViewSet(GenericViewSet):
         if msg_type == "text":
             content = get_stock_market_info(message)
             logger.info(f"reply message {from_user_name=}, {to_user_name=}, {content=}")
+            save_stock_op_log(
+                search=message,
+                response=content,
+                request_from="wechat",
+                ip=request.META.get("REMOTE_ADDR"),
+            )
 
             content = get_resp_content(from_user_name, to_user_name, content)
             return HttpResponse(content)

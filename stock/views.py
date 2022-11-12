@@ -7,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from common.utils.log_utils import save_stock_op_log
 from stock.filters import StockFilter
 from stock.serializers import StockSerializer
 from stock.utils import get_stock_market_info
@@ -30,5 +31,12 @@ class StockViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
         self.get_serializer(data=data).is_valid(raise_exception=True)
 
         search = data.getlist("search")
-        resp = get_stock_market_info(search)
-        return HttpResponse(resp)
+        response = get_stock_market_info(search)
+
+        save_stock_op_log(
+            search=search,
+            response=response,
+            request_from="api",
+            ip=request.META.get("REMOTE_ADDR"),
+        )
+        return HttpResponse(response)
