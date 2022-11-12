@@ -27,7 +27,7 @@ class Stock(CUBaseModel):
         ordering = ("-update_time",)
 
     def __str__(self) -> str:
-        return f"{self.ts_code} {self.name} ({self.id})"
+        return f"{self.ts_code} {self.name}"
 
 
 class Quote(CUBaseModel):
@@ -48,10 +48,10 @@ class Quote(CUBaseModel):
     incr_limit = models.FloatField(null=True, verbose_name="涨停价")
     drop_limit = models.FloatField(null=True, verbose_name="跌停价")
     chg = models.FloatField(null=True, verbose_name="涨跌")
-    pct_chg = models.CharField(null=True, max_length=8, verbose_name="涨跌幅")
+    pct_chg = models.FloatField(null=True, max_length=8, verbose_name="涨跌幅")
     vol = models.FloatField(null=True, verbose_name="成交量(手)")
     amount = models.FloatField(null=True, verbose_name="成交额(万)")
-    turnover_rate = models.CharField(null=True, max_length=8, verbose_name="换手率")
+    turnover_rate = models.FloatField(null=True, max_length=8, verbose_name="换手率")
     total_mv = models.FloatField(null=True, verbose_name="总市值")
     circ_mv = models.FloatField(null=True, verbose_name="流通市值")
 
@@ -60,4 +60,4 @@ class Quote(CUBaseModel):
         ordering = ("-update_time",)
 
     def __str__(self) -> str:
-        return f"{self.stock}, {self.date} ({self.id})"
+        return f"{self.stock.ts_code}, {self.date} ({self.id})"

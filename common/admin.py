@@ -15,6 +15,7 @@ def get_search_help_text(search_fields: Union[list, tuple]) -> str:
 
 """
 https://docs.djangoproject.com/zh-hans/4.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
+https://blog.csdn.net/weixin_45987577/article/details/123880795
 admin显示属性
 
 list_display: 列表页显示字段

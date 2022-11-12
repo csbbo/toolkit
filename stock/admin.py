@@ -1,7 +1,10 @@
 from django import forms
 from django.contrib import admin
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import QuerySet
 
 from common.admin import get_search_help_text
+from common.utils.tushare_utils import get_quotes
 from stock.models import Quote, Stock
 
 
@@ -71,10 +74,13 @@ class StockAdmin(admin.ModelAdmin):
 
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
+    actions = ("update_price",)
     list_display = (
         "stock",
-        "date",
         "price",
+        "pct_chg",
+        "turnover_rate",
+        "date",
         "pre_close",
         "open",
         "high",
@@ -82,16 +88,31 @@ class QuoteAdmin(admin.ModelAdmin):
         "incr_limit",
         "drop_limit",
         "chg",
-        "pct_chg",
         "vol",
         "amount",
-        "turnover_rate",
         "total_mv",
         "circ_mv",
     )
+
     readonly_fields = list_display
 
     search_fields = ("stock__name", "stock__ts_code")
+    search_help_text = get_search_help_text(search_fields)
     list_filter = ("date",)
-    list_per_page = 20
-    ordering = ("-date", "stock_id")
+    list_per_page = 10
+    ordering = ("-turnover_rate",)
+
+    @admin.display(description="update price")
+    def update_price(self, request: WSGIRequest, queryset: QuerySet) -> None:
+        ts_codes = list(queryset.values_list("stock__ts_code", flat=True))
+        result_map: dict = {}
+
+        for result in get_quotes(ts_codes=ts_codes):
+            result_map[result["ts_code"]] = result
+
+        bulk_update_list: list = []
+        for quote in queryset.select_related("stock"):
+            quote.price = result_map[quote.stock.ts_code]["price"]
+            bulk_update_list.append(quote)
+
+        Quote.objects.bulk_update(bulk_update_list, fields=["price"], batch_size=500)

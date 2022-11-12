@@ -54,7 +54,7 @@ def get_stock_market_info(search: Union[str, list]) -> str:
 
     for s in search:
         queryset = Stock.objects.filter(
-            Q(ts_code=s) | Q(symbol=s) | Q(pinyin__icontains=s) | Q(name__icontains=s)
+            Q(ts_code=s) | Q(symbol=s) | Q(cnspell__icontains=s) | Q(name__icontains=s)
         )[:20]
 
         ts_codes = queryset.values_list("ts_code", flat=True)
