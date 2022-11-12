@@ -90,3 +90,8 @@ class QuoteAdmin(admin.ModelAdmin):
         "circ_mv",
     )
     readonly_fields = list_display
+
+    search_fields = ("stock__name", "stock__ts_code")
+    list_filter = ("date",)
+    list_per_page = 20
+    ordering = ("-date", "stock_id")

@@ -97,7 +97,7 @@ class Command(BaseCommand):
             hour="9-16",
             day="*",
             month="*",
-            day_of_week="1-5",
+            day_of_week="0-4",
             next_run_time=timezone.now() if str(run_now) == "true" else None,
         )
 

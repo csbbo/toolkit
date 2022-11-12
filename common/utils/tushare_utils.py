@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Iterable, List, Optional, Tuple, Union
+from typing import Iterable, List, Optional, Union
 
 import requests  # type: ignore
 import tushare
@@ -45,25 +45,11 @@ def fetch_stocks(fields: Optional[list] = None) -> Iterable[dict]:
         yield {key: row[key] for key in fields}
 
 
-def get_real_time_market(ts_code: str) -> Tuple[Optional[float], Optional[str]]:
-    """
-    return: price, rose
-    """
-    code, market = ts_code.split(".")
-    q = f"{market.lower()}{code}"
-
-    url = f"http://qt.gtimg.cn/q={q}"
-    try:
-        r = requests.get(url)
-    except Exception as e:
-        logger.error(f"get real time market fail: \n{str(e)}")
-        return None, None
-
-    price_list = r.text.split("~")
-    return float(price_list[3]), price_list[32]
-
-
 def get_quotes(ts_codes: Union[str, List[str]]) -> List[dict]:
+    return get_gtimg_quotes(ts_codes)
+
+
+def get_gtimg_quotes(ts_codes: Union[str, List[str]]) -> List[dict]:
     """
     获取实时腾讯实时行情接口
     示例: https://qt.gtimg.cn/q=sz000001
@@ -104,10 +90,10 @@ def get_quotes(ts_codes: Union[str, List[str]]) -> List[dict]:
                 "incr_limit": info[47],
                 "drop_limit": info[48],
                 "chg": info[31],
-                "pct_chg": f"{info[32]}%",
+                "pct_chg": info[32],
                 "vol": info[36],
                 "amount": info[37],
-                "turnover_rate": f"{info[38]}%",
+                "turnover_rate": info[38],
                 "total_mv": info[45],
                 "circ_mv": info[44],
             }
@@ -116,3 +102,10 @@ def get_quotes(ts_codes: Union[str, List[str]]) -> List[dict]:
         logger.error(f"get real time quote fail: {str(e)}")
 
     return results
+
+
+def get_now_api_quotes() -> None:
+    """
+    https://www.nowapi.com/api/finance.stock_realtime
+    """
+    pass
