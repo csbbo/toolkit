@@ -34,6 +34,9 @@ class Config(CUBaseModel):
         ordering = ("-update_time",)
 
     def __str__(self) -> str:
+        """
+        https://www.cnblogs.com/miaoning/p/11399575.html
+        """
         return f"{self.key} ({self.id})"
 
 

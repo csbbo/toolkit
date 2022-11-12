@@ -19,6 +19,7 @@ admin显示属性
 
 list_display: 列表页显示字段
 list_display_links: 可以链接到表单的字段
+readonly_fields: 只读字段
 list_per_page: 分页大小
 ordering: 默认排序字段
 

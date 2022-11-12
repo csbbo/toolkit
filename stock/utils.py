@@ -3,7 +3,7 @@ from typing import List, Union
 from django.db.models import Q
 
 from common.utils import tushare_utils
-from stock.models import Stock
+from stock.models import Quote, Stock
 
 
 def batch_save_stocks(items: list, batch_size: int = 100) -> None:
@@ -17,6 +17,25 @@ def batch_save_stocks(items: list, batch_size: int = 100) -> None:
         bulk_create_list.append(Stock(**item))
 
     Stock.objects.bulk_create(
+        bulk_create_list,
+        batch_size=batch_size,
+        update_conflicts=True,
+        update_fields=update_fields,
+        unique_fields=unique_fields,
+    )
+
+
+def batch_save_quotes(items: list, batch_size: int = 100) -> None:
+    update_fields: List[str] = []
+    unique_fields = ["stock_id", "date"]
+
+    bulk_create_list = []
+    for item in items:
+        if not update_fields:
+            update_fields = [x for x in item.keys() if x not in unique_fields]
+        bulk_create_list.append(Quote(**item))
+
+    Quote.objects.bulk_create(
         bulk_create_list,
         batch_size=batch_size,
         update_conflicts=True,

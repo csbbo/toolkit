@@ -28,3 +28,36 @@ class Stock(CUBaseModel):
 
     def __str__(self) -> str:
         return f"{self.ts_code} {self.name} ({self.id})"
+
+
+class Quote(CUBaseModel):
+    """
+    只保留最近30个交易日行情
+    """
+
+    stock = models.ForeignKey(
+        Stock, db_constraint=False, on_delete=models.CASCADE, related_name="history"
+    )
+    date = models.DateField(verbose_name="时间")
+
+    price = models.FloatField(verbose_name="当前价格")
+    pre_close = models.FloatField(null=True, verbose_name="昨日收盘价")
+    open = models.FloatField(null=True, verbose_name="开盘价")
+    high = models.FloatField(null=True, verbose_name="最高价")
+    low = models.FloatField(null=True, verbose_name="最低价")
+    incr_limit = models.FloatField(null=True, verbose_name="涨停价")
+    drop_limit = models.FloatField(null=True, verbose_name="跌停价")
+    chg = models.FloatField(null=True, verbose_name="涨跌")
+    pct_chg = models.CharField(null=True, max_length=8, verbose_name="涨跌幅")
+    vol = models.FloatField(null=True, verbose_name="成交量(手)")
+    amount = models.FloatField(null=True, verbose_name="成交额(万)")
+    turnover_rate = models.CharField(null=True, max_length=8, verbose_name="换手率")
+    total_mv = models.FloatField(null=True, verbose_name="总市值")
+    circ_mv = models.FloatField(null=True, verbose_name="流通市值")
+
+    class Meta:
+        unique_together = ("stock", "date")
+        ordering = ("-update_time",)
+
+    def __str__(self) -> str:
+        return f"{self.stock}, {self.date} ({self.id})"

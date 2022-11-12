@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 
 from common.admin import get_search_help_text
-from stock.models import Stock
+from stock.models import Quote, Stock
 
 
 @admin.register(Stock)
@@ -53,7 +53,40 @@ class StockAdmin(admin.ModelAdmin):
     list_filter = [
         x
         for x in list_display
-        if x not in {"id", "name", "ts_code", "symbol", "cnspell", "fullname", "enname"}
+        if x
+        not in {
+            "id",
+            "name",
+            "ts_code",
+            "symbol",
+            "cnspell",
+            "fullname",
+            "enname",
+            "list_date",
+        }
     ]
     list_per_page = 10
     ordering = ("symbol",)
+
+
+@admin.register(Quote)
+class QuoteAdmin(admin.ModelAdmin):
+    list_display = (
+        "stock",
+        "date",
+        "price",
+        "pre_close",
+        "open",
+        "high",
+        "low",
+        "incr_limit",
+        "drop_limit",
+        "chg",
+        "pct_chg",
+        "vol",
+        "amount",
+        "turnover_rate",
+        "total_mv",
+        "circ_mv",
+    )
+    readonly_fields = list_display
