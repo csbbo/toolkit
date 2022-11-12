@@ -21,3 +21,23 @@ class CUBaseModel(CBaseModel):
 
     class Meta:
         abstract = True
+
+
+class Config(CUBaseModel):
+    id = models.BigAutoField(primary_key=True, auto_created=True)
+    key = models.CharField(max_length=20, db_index=True, unique=True)
+    value = models.TextField()
+    category = models.CharField(max_length=20, null=True)
+    remark = models.TextField(default="")
+
+    class Meta:
+        ordering = ("-update_time",)
+
+
+class Log(CBaseModel):
+    id = models.BigAutoField(primary_key=True, auto_created=True)
+    type = models.IntegerField()
+    info = models.JSONField(default=dict)
+
+    class Meta:
+        ordering = ("-create_time",)
