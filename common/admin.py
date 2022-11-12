@@ -19,6 +19,8 @@ admin显示属性
 
 list_display: 列表页显示字段
 list_display_links: 可以链接到表单的字段
+list_per_page: 分页大小
+ordering: 默认排序字段
 
 search_fields: 列表页可以模糊搜索的字段
 search_help_text: 模糊搜索提示文本
@@ -40,7 +42,7 @@ class ConfigAdmin(admin.ModelAdmin):
 
     form = Form
 
-    list_display = [
+    list_display = (
         "id",
         "key",
         "value",
@@ -48,19 +50,19 @@ class ConfigAdmin(admin.ModelAdmin):
         "remark",
         "create_time",
         "update_time",
-    ]
-    list_display_links = ["id"]
+    )
+    list_display_links = ("id",)
 
-    search_fields = ["key"]
+    search_fields = ("key",)
     search_help_text = get_search_help_text(search_fields)
-    list_filter = ["category", "create_time", "update_time"]
+    list_filter = ("category", "create_time", "update_time")
 
 
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
-    list_display = ["id", "type", "info", "create_time"]
-    list_display_links = ["id"]
+    list_display = ("id", "type", "info", "create_time")
+    list_display_links = ("id",)
 
-    search_fields = ["type", "info"]
+    search_fields = ("type", "info")
     search_help_text = get_search_help_text(search_fields)
-    list_filter = ["type", "create_time"]
+    list_filter = ("type", "create_time")

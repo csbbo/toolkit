@@ -33,6 +33,9 @@ class Config(CUBaseModel):
     class Meta:
         ordering = ("-update_time",)
 
+    def __str__(self) -> str:
+        return f"{self.key} ({self.id})"
+
 
 class Log(CBaseModel):
     id = models.BigAutoField(primary_key=True, auto_created=True)
@@ -41,3 +44,6 @@ class Log(CBaseModel):
 
     class Meta:
         ordering = ("-create_time",)
+
+    def __str__(self) -> str:
+        return f"{self.type} ({self.id})"

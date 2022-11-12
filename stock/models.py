@@ -25,3 +25,6 @@ class Stock(CUBaseModel):
 
     class Meta:
         ordering = ("-update_time",)
+
+    def __str__(self) -> str:
+        return f"{self.ts_code} {self.name} ({self.id})"
