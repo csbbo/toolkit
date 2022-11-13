@@ -1,10 +1,10 @@
 FROM bitnami/openresty:1.21
-ADD . /web/nginx
+ADD . /web/openresty
 
-RUN printf "deb http://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free\ndeb http://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free\ndeb http://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free\ndeb http://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free\n" > /etc/apt/sources.list
 RUN apt-get update \
     && apt-get install -y python3-certbot-nginx vim \
     && ln -svf /web/openresty/nginx.conf /etc/nginx/nginx.conf # certbot detection
 
-WORKDIR /web
-CMD nginx -c /web/openresty/nginx.conf
+WORKDIR /web/openresty
+
+CMD ["openresty", "-c", "/web/openresty/nginx.conf"]
