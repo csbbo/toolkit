@@ -1,5 +1,8 @@
 #! /bin/bash
 
+echo -e "\033[31m - collection static \033[0m"
+python manage.py collectstatic
+
 echo -e "\033[31m - run databases migrate \033[0m"
 while :; do
     if python3 manage.py migrate; then
