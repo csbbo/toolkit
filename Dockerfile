@@ -10,4 +10,4 @@ RUN apt-get update \
     && apt-get install -y ${PACKAGE} \
     && pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /web/requirements.txt
 
-CMD ["/usr/local/bin/supervisord", "-c", "/web/supervisor/supervisord.conf", "-n"]
+CMD ["/usr/bin/supervisord", "-c", "/web/supervisor/supervisord.conf", "-n"]
