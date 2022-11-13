@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from account.models import Group, User
+from account.models import User
 
 
 @admin.register(User)
@@ -22,7 +22,4 @@ class UserAdmin(admin.ModelAdmin):
         "update_time",
     )
 
-
-@admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    search_fields = ("username", "name", "first_name", "last_name")
