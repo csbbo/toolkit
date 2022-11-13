@@ -5,6 +5,7 @@
 Dockerfile
 docker-compose.yml
 
+nginx
 volumes
 db.sqlite3
 README.md

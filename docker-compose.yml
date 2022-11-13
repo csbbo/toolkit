@@ -4,8 +4,8 @@ services:
     image: mongo:4.2.9
     container_name: tk_mongo
     restart: always
-    ports:
-      - "127.0.0.1:17017:27017/tcp"
+#    ports:
+#      - "127.0.0.1:17017:27017/tcp"
     volumes:
       - "./volumes/database/mongodb:/data/db"
       # - "./data/mongo-entrypoint:/docker-entrypoint-initdb.d"
@@ -13,13 +13,24 @@ services:
     image: redis:6.2.6
     container_name: tk_redis
     restart: always
-    ports:
-      - "127.0.0.1:16379:6379/tcp"
+#    ports:
+#      - "127.0.0.1:16379:6379/tcp"
     volumes:
       - "./volumes/database/redis:/data"
   server:
-    image: toolkit:latest
+    image: tk_server:latest
     container_name: tk_server
     restart: always
+#    ports:
+#      - "80:8000"
+  nginx:
+    image: tk_nginx:latest
+    container_name: tk_nginx
+    restart: always
+    depends_on:
+      - mongo
+      - redis
+      - server
     ports:
-      - "80:8000"
+      - "80:80"
+      - "443:443"
