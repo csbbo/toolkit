@@ -24,7 +24,7 @@ services:
 #    ports:
 #      - "80:8000"
     volumes:
-      - "./volumes/resources/static:/openresty/static"
+      - "./volumes/collectstatic:/openresty/collectstatic"
   openresty:
     image: tk_openresty:latest
     container_name: tk_openresty
@@ -37,4 +37,4 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "./volumes/resources/static:/openresty/static"
+      - "./volumes/collectstatic:/openresty/collectstatic"
