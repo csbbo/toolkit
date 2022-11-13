@@ -5,7 +5,7 @@
 Dockerfile
 docker-compose.yml
 
-nginx
+openresty
 volumes
 db.sqlite3
 README.md
