@@ -9,3 +9,5 @@ openresty
 volumes
 db.sqlite3
 README.md
+.pre-commit-config.yaml
+docker-compose.local.yml
