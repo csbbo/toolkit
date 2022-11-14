@@ -2,7 +2,7 @@ version: "3"
 services:
   postgres:
     image: postgres:14.5-alpine
-    container_name: tk_postgres
+    container_name: tool_postgres
     restart: always
     #    ports:
     #      - "127.0.0.1:15432:5432/tcp"
@@ -14,7 +14,7 @@ services:
       - "./volumes/postgresql:/var/lib/postgresql/data"
   mongo:
     image: mongo:4.2.9
-    container_name: tk_mongo
+    container_name: tool_mongo
     restart: always
     #    ports:
     #      - "127.0.0.1:17017:27017/tcp"
@@ -23,23 +23,23 @@ services:
       # - "./data/mongo-entrypoint:/docker-entrypoint-initdb.d"
   redis:
     image: redis:6.2.6
-    container_name: tk_redis
+    container_name: tool_redis
     restart: always
     #    ports:
     #      - "127.0.0.1:16379:6379/tcp"
     volumes:
       - "./volumes/database/redis:/data"
   server:
-    image: tk_server:latest
-    container_name: tk_server
+    image: tool_server:latest
+    container_name: tool_server
     restart: always
     #    ports:
     #      - "80:8000"
     volumes:
       - "./volumes/collectstatic:/collectstatic"
   openresty:
-    image: tk_openresty:latest
-    container_name: tk_openresty
+    image: tool_openresty:latest
+    container_name: tool_openresty
     restart: always
     depends_on:
       - mongo
