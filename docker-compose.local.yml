@@ -5,7 +5,7 @@ services:
     container_name: tool_postgres
     restart: always
     ports:
-      - "127.0.0.1:55432:5432/tcp"
+      - "127.0.0.1:15432:5432/tcp"
     environment:
       POSTGRES_DB: toolkit
       POSTGRES_PASSWORD: "toolkit"
@@ -17,7 +17,7 @@ services:
     container_name: tool_mongo
     restart: always
     ports:
-      - "127.0.0.1:57017:27017/tcp"
+      - "127.0.0.1:17017:27017/tcp"
     volumes:
       - "./volumes/database/mongodb:/data/db"
       # - "./data/mongo-entrypoint:/docker-entrypoint-initdb.d"
@@ -26,6 +26,19 @@ services:
     container_name: tool_redis
     restart: always
     ports:
-      - "127.0.0.1:56379:6379/tcp"
+      - "127.0.0.1:16379:6379/tcp"
     volumes:
       - "./volumes/database/redis:/data"
+
+  rabbitmq:
+    image: portus.in.chaitin.net/library/rabbitmq:3.7-management-alpine
+    container_name: tool_rabbitmq
+    restart: always
+    ports:
+      - "127.0.0.1:15672:5672/tcp"
+      - "127.0.0.1:15673:15672/tcp"
+    environment:
+      RABBITMQ_DEFAULT_USER: toolkit
+      RABBITMQ_DEFAULT_PASS: toolkit
+    volumes:
+      - "./volumes/rabbitmq:/var/lib/rabbitmq"

@@ -13,11 +13,14 @@ logger = logging.getLogger(__name__)
 broker = dramatiq.get_broker()
 
 
-def send_task(*args: list, **kwargs: dict) -> None:
-    task_name = kwargs.pop("_task_name")
+def send_task(**kwargs: dict) -> None:
+    print(kwargs)
+    task_name = kwargs.get("task_name", "")
     func = broker.get_actor(task_name)
+    task_kwargs = kwargs.get("task_kwargs", {})
+    task_priority = kwargs.get("task_priority", 100)
 
-    message = func.send_with_options(*args, **kwargs)
+    message = func.send_with_options(kwargs=task_kwargs, priority=task_priority)
     msg_id = message.message_id
     # see: https://github.com/Bogdanp/django_dramatiq/issues/44#issuecomment-511375731
     broker.connection.close()
@@ -32,12 +35,12 @@ def send_task(*args: list, **kwargs: dict) -> None:
             logger.info(
                 f"Task: {func}, wait for message: {msg_id} finished, sleep for {sleep_secs} secs"
             )
-            time.sleep(sleep_secs)
+            time.sleep(3)
             pass
 
 
 class Command(BaseCommand):
-    help = "Sync Stocks"
+    help = "Scheduler task"
 
     def add_arguments(self, parser: Any) -> None:
         parser.add_argument("--run_now", type=str, default="true")
@@ -48,11 +51,15 @@ class Command(BaseCommand):
         # https://apscheduler.readthedocs.io/en/3.x/userguide.html
         scheduler = BlockingScheduler()
 
-        for task in ScheduleTask.objects.all():
+        for task in ScheduleTask.objects.filter(enabled=True):
+            job_kwargs = {
+                "task_name": task.actor_name,
+                "task_kwargs": task.kwargs,  # 任务只支持传kwargs, 不支持传args
+                "task_priority": task.priority,
+            }
             scheduler.add_job(
                 func=send_task,
-                args=task.args,
-                kwargs={"_task_name": task.actor_name, **task.kwargs},
+                kwargs=job_kwargs,
                 trigger=task.trigger,
                 **task.config,
             )

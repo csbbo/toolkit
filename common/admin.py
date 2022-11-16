@@ -3,7 +3,7 @@ from typing import Union
 from django import forms
 from django.contrib import admin
 
-from common.models import Config, Log
+from common.models import Config, Log, ScheduleTask
 
 
 def get_search_help_text(search_fields: Union[list, tuple]) -> str:
@@ -69,3 +69,36 @@ class LogAdmin(admin.ModelAdmin):
     search_fields = ("type", "info")
     search_help_text = get_search_help_text(search_fields)
     list_filter = ("type", "create_time")
+
+
+@admin.register(ScheduleTask)
+class ScheduleTaskAdmin(admin.ModelAdmin):
+    class Form(forms.ModelForm):
+        kwargs = forms.Textarea()
+
+    form = Form
+    list_display = (
+        "id",
+        "trigger",
+        "config",
+        "name",
+        "actor_name",
+        "kwargs",
+        "priority",
+        "enabled",
+        "create_time",
+        "update_time",
+    )
+    list_display_links = ("id",)
+
+    search_fields = ("name", "actor_name")
+    search_help_text = get_search_help_text(search_fields)
+    list_filter = (
+        "trigger",
+        "name",
+        "actor_name",
+        "enabled",
+        "priority",
+        "create_time",
+        "update_time",
+    )
