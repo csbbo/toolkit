@@ -50,3 +50,21 @@ class Log(CBaseModel):
 
     def __str__(self) -> str:
         return f"{self.type} ({self.id})"
+
+
+class ScheduleTask(CUBaseModel):
+    id = models.BigAutoField(primary_key=True, auto_created=True)
+    trigger = models.CharField(max_length=8)
+    config = models.JSONField(default=dict)
+    name = models.CharField(max_length=200)
+    actor_name = models.CharField(max_length=1024, null=True)
+    args = models.JSONField(default=list)
+    kwargs = models.JSONField(default=dict)
+    priority = models.PositiveIntegerField(default=None)
+    enabled = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ("-create_time",)
+
+    def __str__(self) -> str:
+        return f"{self.id}"
