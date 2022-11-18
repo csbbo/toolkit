@@ -14,7 +14,6 @@ from rest_framework_xml.parsers import XMLParser
 
 from common.utils import xml_utils
 from common.utils.log_utils import save_stock_op_log
-from common.utils.shell_utils import run_command
 from stock.utils import get_stock_market_info
 from wechat.utils import check_signature, get_resp_content
 
@@ -53,24 +52,14 @@ class WxViewSet(GenericViewSet):
         from_user_name = xml_data.get("ToUserName", "")
 
         if msg_type == "text":
-            # 包含空格则认为是命令
-            if " " in message:
-                result, error = run_command(message)
-                if not error:
-                    content = result
-                else:
-                    content = error
-            else:
-                content = get_stock_market_info(message)
-                save_stock_op_log(
-                    search=message,
-                    response=content,
-                    request_from="wechat",
-                    ip=request.META.get("REMOTE_ADDR"),
-                )
-                logger.info(
-                    f"reply message {from_user_name=}, {to_user_name=}, {content=}"
-                )
+            content = get_stock_market_info(message)
+            save_stock_op_log(
+                search=message,
+                response=content,
+                request_from="wechat",
+                ip=request.META.get("REMOTE_ADDR"),
+            )
+            logger.info(f"reply message {from_user_name=}, {to_user_name=}, {content=}")
 
             content = get_resp_content(from_user_name, to_user_name, content)
             return HttpResponse(content)
