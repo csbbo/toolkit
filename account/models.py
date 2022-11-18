@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from common.models import CUBaseModel
+from common.models import CBaseModel, CUBaseModel
 
 
 class User(AbstractUser, CUBaseModel):
@@ -16,3 +16,10 @@ class User(AbstractUser, CUBaseModel):
 
     class Meta:
         ordering = ("-update_time",)
+
+
+class Feedback(CBaseModel):
+    content = models.TextField()
+    creator = models.ForeignKey(
+        User, related_name="feedbacks", on_delete=models.CASCADE, db_constraint=False
+    )

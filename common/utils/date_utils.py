@@ -11,5 +11,5 @@ def str2datetime(
     return datetime.strptime(value, fmt).replace(tzinfo=tzinfo)
 
 
-def format_datetime(obj: date, fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
+def datetime_format(obj: date, fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
     return obj.strftime(fmt)
